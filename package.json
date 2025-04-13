@@ -1,10 +1,13 @@
 {
   "name": "stopwatch-app",
   "version": "1.0.0",
+  "homepage": "https://laffingDragons.github.io/Stopwatch-Timer-UIHackaton",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d dist"
   },
   "dependencies": {
     "@use-gesture/react": "^10.3.0",
@@ -16,6 +19,7 @@
     "@types/react": "^18.2.43",
     "@types/react-dom": "^18.2.17",
     "@vitejs/plugin-react": "^4.2.1",
+    "gh-pages": "^6.3.0",
     "vite": "^5.0.8"
   }
 }
