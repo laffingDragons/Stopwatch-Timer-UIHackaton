@@ -7,7 +7,6 @@ export default defineConfig({
   build: {
     terserOptions: {
       parse: {
-        // Enable terser to handle ES2021 syntax
         ecma: 2020
       }
     }
