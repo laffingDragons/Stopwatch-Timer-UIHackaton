@@ -1,0 +1,383 @@
+.halo-effect {
+    transition: opacity 0.5s ease;
+  }
+  
+  @keyframes pulseHalo {
+    0% { opacity: 0.1; }
+    50% { opacity: 0.3; }
+    100% { opacity: 0.1; }
+  }/* Google Fonts Import */
+  @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700&family=Roboto:wght@300;400;500&display=swap');
+  
+  /* CSS Variables for Theming */
+  :root {
+    /* Dark Theme (Default) */
+    --bg-primary: #060b13;
+    --bg-secondary: #0a1523;
+    --bg-accent: #122036;
+    --text-color: #00ccff;
+    --text-secondary: #80ccff;
+    --neon-color: #00ccff;
+    --neon-secondary: #0066ff;
+    --button-bg: rgba(0, 20, 40, 0.4);
+    --fastest-color: #00cc88;
+    --slowest-color: #ff4477;
+    --shadow-color: rgba(0, 204, 255, 0.5);
+    --gradient-start: #6600cc;
+    --gradient-mid: #00ccff;
+    --gradient-end: #0066ff;
+  }
+  
+  /* Light Theme */
+  [data-theme="light"] {
+    --bg-primary: #f0f0fa;
+    --bg-secondary: #e0e0ea;
+    --bg-accent: #d0d0e0;
+    --text-color: #0066aa;
+    --text-secondary: #4488bb;
+    --neon-color: #0088cc;
+    --neon-secondary: #0055aa;
+    --button-bg: rgba(210, 230, 255, 0.8);
+    --fastest-color: #00aa66;
+    --slowest-color: #cc3355;
+    --shadow-color: rgba(0, 130, 210, 0.3);
+    --gradient-start: #8800cc;
+    --gradient-mid: #0088cc;
+    --gradient-end: #0044cc;
+  }
+  
+  /* Reset */
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  body {
+    font-family: 'Roboto', sans-serif;
+    background-color: var(--bg-primary);
+    color: var(--text-color);
+    min-height: 100vh;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    perspective: 1000px;
+  }
+  
+  /* App Container */
+  .app-container {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    max-width: 100%;
+    margin: 0 auto;
+    padding: 1rem;
+  }
+  
+  /* Header */
+  .app-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 0;
+    margin-bottom: 30px;
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+  
+  .app-title {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 1.5rem;
+    font-weight: 700;
+    text-shadow: 0 0 8px var(--shadow-color);
+    letter-spacing: 2px;
+    color: var(--text-color);
+  }
+  
+  .theme-toggle {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    border: 2px solid var(--text-color);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: var(--text-color);
+    font-weight: bold;
+    background-color: transparent;
+    cursor: pointer;
+    font-size: 1.2rem;
+    box-shadow: 0 0 10px var(--shadow-color);
+    transition: all 0.3s ease;
+  }
+  
+  .theme-toggle:hover {
+    box-shadow: 0 0 15px var(--shadow-color);
+    transform: scale(1.05);
+  }
+  
+  /* Main Stopwatch Container */
+  .stopwatch-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 2rem;
+    flex-grow: 1;
+    padding: 1rem;
+  }
+  
+  /* 3D perspective container */
+  .timer-wrapper {
+    position: relative;
+    width: 300px;
+    height: 300px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 50px;
+    transform: scale(0.5) translateZ(-200px);
+    opacity: 0;
+    perspective: 1000px;
+    transition: transform 1.2s cubic-bezier(0.19, 1, 0.22, 1), opacity 1s ease;
+    border-radius: 50%; /* Make sure the wrapper itself is circular */
+    overflow: visible; /* Allow the glow to extend beyond the circle */
+  }
+  
+  .loaded .timer-wrapper {
+    transform: scale(1) translateZ(0);
+    opacity: 1;
+  }
+  
+  .frontend-ui-label {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -80%);
+    font-size: 16px;
+    color: var(--text-secondary);
+    opacity: 0.7;
+    font-family: 'Orbitron', sans-serif;
+    pointer-events: none;
+  }
+  
+  /* Timer Circle */
+  .timer-circle-container {
+    position: relative;
+    width: 100%;
+    height: 100%;
+  }
+  
+  .timer-bg-circle {
+    fill: transparent;
+    stroke: var(--bg-accent);
+    stroke-width: 5;
+    opacity: 0.5;
+  }
+  
+  .timer-progress-circle {
+    fill: transparent;
+    stroke-width: 6;
+    stroke-linecap: round;
+    filter: drop-shadow(0 0 3px var(--neon-color));
+    transition: filter 0.3s ease;
+  }
+  
+  .timer-text {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 42px;
+    font-weight: bold;
+    text-anchor: middle;
+    dominant-baseline: middle;
+    fill: var(--text-color);
+    letter-spacing: 2px;
+  }
+  
+  /* Tick marks */
+  .tick-marks .tick-major {
+    stroke: #144366;
+    stroke-width: 2;
+    opacity: 0.7;
+  }
+  
+  .tick-marks .tick-minor {
+    stroke: #144366;
+    stroke-width: 1;
+    opacity: 0.7;
+  }
+  
+  /* Controls wrapper with animation */
+  .controls-wrapper {
+    width: 100%;
+    max-width: 500px;
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 1s ease 0.4s, transform 1s ease 0.4s;
+  }
+  
+  .loaded .controls-wrapper {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  
+  /* Controls */
+  .controls-container {
+    width: 100%;
+    touch-action: none; /* Important for gestures to work properly */
+  }
+  
+  .buttons-container {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    width: 100%;
+  }
+  
+  .control-button {
+    background-color: transparent;
+    color: var(--text-color);
+    border: 2px solid var(--text-color);
+    border-radius: 4px;
+    padding: 12px 40px;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    box-shadow: 0 0 10px rgba(0, 204, 255, 0.4);
+    transition: all 0.3s ease;
+    letter-spacing: 2px;
+    width: 200px;
+    font-family: 'Orbitron', sans-serif;
+    outline: none;
+  }
+  
+  .control-button:hover {
+    box-shadow: 0 0 15px rgba(0, 204, 255, 0.7);
+  }
+  
+  .control-button:active {
+    transform: scale(0.95);
+  }
+  
+  .start-stop-button.stop {
+    border-color: #ff4477;
+    color: #ff4477;
+    box-shadow: 0 0 10px rgba(255, 68, 119, 0.5);
+  }
+  
+  .start-stop-button.stop:hover {
+    box-shadow: 0 0 15px rgba(255, 68, 119, 0.8);
+  }
+  
+  /* Laps wrapper with animation */
+  .laps-wrapper {
+    width: 100%;
+    max-width: 500px;
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 1s ease 0.6s, transform 1s ease 0.6s;
+  }
+  
+  .loaded .laps-wrapper {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  
+  /* Performance graph */
+  .performance-graph {
+    margin-bottom: 20px;
+    position: relative;
+    height: 50px;
+  }
+  
+  .wave-path {
+    fill: none;
+    stroke: url(#waveGradient);
+    stroke-width: 2;
+    stroke-linecap: round;
+  }
+  
+  /* Lap List */
+  .lap-list-container {
+    width: 100%;
+  }
+  
+  .lap-list-title {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 1.1rem;
+    margin-bottom: 0.8rem;
+    color: var(--text-color);
+    display: none; /* Hide the title as in the Outlier design */
+  }
+  
+  .lap-list {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
+  
+  .lap-item {
+    display: flex;
+    justify-content: space-between;
+    color: var(--text-color);
+    font-size: 18px;
+    padding: 5px 10px;
+    font-family: 'Orbitron', sans-serif;
+    transform: translateX(0); /* For animation */
+    opacity: 1; /* For animation */
+    transition: transform 0.5s ease, opacity 0.5s ease;
+  }
+  
+  .fastest {
+    color: var(--fastest-color);
+  }
+  
+  .slowest {
+    color: var(--slowest-color);
+  }
+  
+  .no-laps {
+    text-align: center;
+    color: var(--text-secondary);
+    padding: 1rem;
+    font-family: 'Orbitron', sans-serif;
+  }
+  
+  /* Footer */
+  .app-footer {
+    margin-top: auto;
+    padding: 1rem 0;
+    text-align: center;
+    font-size: 0.8rem;
+    color: var(--text-secondary);
+    opacity: 0.7;
+  }
+  
+  /* Media Queries for Responsive Design */
+  @media (min-width: 768px) {
+    .app-container {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 2rem;
+    }
+    
+    .app-title {
+      font-size: 2rem;
+    }
+    
+    .stopwatch-container {
+      flex-direction: column;
+      align-items: center;
+    }
+    
+    .timer-wrapper {
+      width: 350px;
+      height: 350px;
+    }
+    
+    .control-button {
+      padding: 15px 40px;
+      font-size: 1.2rem;
+    }
+    
+    .laps-wrapper {
+      max-width: 600px;
+    }
+  }
