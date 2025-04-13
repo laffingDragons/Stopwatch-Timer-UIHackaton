@@ -2,7 +2,6 @@
 
 A modern, sleek stopwatch and timer application with futuristic 3D effects, neon glowing elements, and smooth animations.
 
-![Futuristic Stopwatch](screenshot.png)
 
 ## Features
 
@@ -17,7 +16,7 @@ A modern, sleek stopwatch and timer application with futuristic 3D effects, neon
 
 ## Live Demo
 
-Check out the live demo: [Futuristic Stopwatch](https://yourusername.github.io/futuristic-stopwatch)
+Check out the live demo: [Futuristic Stopwatch](https://laffingdragons.github.io/Stopwatch-Timer-UIHackaton/)
 
 ## Technologies Used
 
