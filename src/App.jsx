@@ -3,8 +3,8 @@ import anime from 'animejs/lib/anime.es.js'; // Using animejs 4
 import TimerCircle from './components/TimerCircle';
 import LapList from './components/LapList';
 import Controls from './components/Controls';
-import Settings from './components/Settings';
 import TimerInput from './components/TimerInput';
+import Settings from './components/settings';
 
 const App = () => {
   // Core timer states
@@ -547,7 +547,7 @@ const App = () => {
   return (
     <div className={`app-container ${theme} ${colorScheme} ${loaded ? 'loaded' : ''}`} ref={appRef} data-theme={theme} data-color-scheme={colorScheme}>
       <header className="app-header">
-        <h1 className="app-title">OUTL!ER.AI</h1>
+        <h1 className="app-title"></h1>
         <div className="header-controls">
           <button 
             className="mode-toggle" 
