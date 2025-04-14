@@ -11,7 +11,7 @@ A modern, sleek stopwatch and timer application with futuristic 3D effects, neon
 - **Gradient Trail:** Colorful progress indicator with smooth gradient
 - **Multiple Themes:** Various color schemes to match your preference
 - **Mobile Responsive:** Fully responsive design that works on all devices
-- **Gesture Control:** Swipe gestures for mobile interaction and optional shake-to-control
+- **Shake-to-control**
 - **Sound Effects:** Audio feedback for timer completion and interactions
 
 ## Live Demo
