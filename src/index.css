@@ -468,7 +468,6 @@ body {
       inset 0 0 10px #ff4477;
     text-shadow: 0 0 5px #ff4477;
   }/* Google Fonts Import */
-  @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700&family=Roboto:wght@300;400;500&display=swap');
   
   /* CSS Variables for Theming */
   :root {
