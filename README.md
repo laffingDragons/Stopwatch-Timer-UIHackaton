@@ -1,153 +1,147 @@
-# Futuristic Stopwatch/Timer
 
-A modern, sleek stopwatch and timer application with futuristic 3D effects, neon glowing elements, and smooth animations.
+<div align="center">
+  <img src="https://via.placeholder.com/150.png?text=TimeMaster+Logo" alt="TimeMaster Logo" width="150"/>
+  <h1>TimeMaster: Stopwatch & Timer</h1>
+  <p>
+    <strong>A sleek, interactive web app for time tracking with stunning neomorphic design and dynamic particle effects.</strong>
+  </p>
+  <p>
+    Built for the <strong>UI Hackathon 2025</strong> by <a href="https://www.linkedin.com/in/akkshay-paatil/">Akkshay Paatil</a> and the LaffingDragons team.
+  </p>
 
+  <a href="https://github.com/laffingDragons/Stopwatch-Timer-UIHackaton">
+    <img src="https://img.shields.io/badge/GitHub-Repository-blue?style=for-the-badge&logo=github" alt="GitHub Repository"/>
+  </a>
+  <a href="https://laffingdragons.github.io/Stopwatch-Timer-UIHackaton">
+    <img src="https://img.shields.io/badge/Live%20Demo-Visit%20Now-green?style=for-the-badge" alt="Live Demo"/>
+  </a>
+</div>
 
-## Features
+---
 
-- **Dual Mode:** Switch between Stopwatch and Timer functionality
-- **3D Effects:** Multi-layered parallax UI with depth and perspective
-- **Neon Glow:** Dynamic glowing elements that respond to interaction
-- **Gradient Trail:** Colorful progress indicator with smooth gradient
-- **Multiple Themes:** Various color schemes to match your preference
-- **Mobile Responsive:** Fully responsive design that works on all devices
-- **Shake-to-control**
-- **Sound Effects:** Audio feedback for timer completion and interactions
+## 🏆 Hackathon Winner: Best UI/UX Design
 
-## Live Demo
+**TimeMaster** won the **Best UI/UX Design Award** at the UI Hackathon 2025! 🎉 Judges praised its modern neomorphic design, intuitive interactions, and mesmerizing background effects that enhance the user experience without distraction.
 
-Check out the live demo: [Futuristic Stopwatch](https://laffingdragons.github.io/Stopwatch-Timer-UIHackaton/)
+---
 
-## Technologies Used
+## 🌟 About TimeMaster
 
-- **React** - Component-based UI architecture
-- **Anime.js** - Smooth and sophisticated animations
-- **SVG** - Advanced vector graphics for the timer interface
-- **CSS3** - Modern styling with 3D transforms and effects
-- **@use-gesture/react** - Touch and gesture interactions
+TimeMaster is not just a stopwatch and timer—it's an experience. Designed with a focus on aesthetics and functionality, this web app combines a futuristic **neomorphic UI** with subtle, dynamic particle effects to create a time-tracking tool that’s as beautiful as it is practical. Whether you're timing a workout, a study session, or a cooking recipe, TimeMaster makes every second visually engaging.
 
-## Installation
+### Key Features
+- **Dual Modes**: Seamlessly switch between **Stopwatch** and **Timer** modes with a single click.
+- **Neomorphic Design**: Boxy, tactile buttons with a press-in effect for a modern, premium feel.
+- **Dynamic Particle Trails**: Background particles with trails that follow their movement, slowing down in stopwatch mode and speeding up in timer mode for an immersive experience.
+- **Shake to Start/Stop**: Intuitive shake detection for hands-free control on mobile devices.
+- **Customizable Presets**: Quick timer presets (1m, 3m, 5m, 10m) with animated feedback.
+- **Responsive Layout**: Works flawlessly on desktop, tablet, and mobile devices.
+- **Light/Dark Themes**: Toggle between themes with a glow effect for enhanced visibility.
 
+---
+
+## 🚀 Live Demo
+
+Try TimeMaster now!  
+👉 [Live Demo](https://laffingdragons.github.io/Stopwatch-Timer-UIHackaton)
+
+Watch the particles slow down as the stopwatch runs, or speed up as the timer counts down—an effect that wowed the hackathon judges!
+
+---
+
+## 🎥 Screenshots
+
+<div align="center">
+  <img src="https://via.placeholder.com/600x300.png?text=Stopwatch+Mode" alt="Stopwatch Mode" width="300"/>
+  <img src="https://via.placeholder.com/600x300.png?text=Timer+Mode" alt="Timer Mode" width="300"/>
+  <p><em>Left: Stopwatch mode with slowed particle trails. Right: Timer mode with accelerated particle trails.</em></p>
+</div>
+
+---
+
+## 🛠️ Tech Stack
+
+- **Frontend**: React.js for a modular, component-based architecture.
+- **Styling**: CSS with custom variables for themes and color schemes.
+- **Animations**: Anime.js for smooth button presses and particle effects.
+- **Canvas API**: Used for rendering dynamic particle trails in the background.
+- **Device Motion API**: Enables shake-to-start/stop functionality on mobile devices.
+
+---
+
+## ✨ What Makes TimeMaster Stand Out?
+
+### 1. Neomorphic UI
+We ditched traditional flat buttons for a **neomorphic design**, giving the controls a tactile, 3D feel. The buttons feature a subtle press-in animation, making interactions satisfying and intuitive.
+
+### 2. Dynamic Particle Trails
+The background isn’t just a static layer—it’s alive! Each particle has a fading trail that follows its movement:
+- In **Stopwatch** mode, particles slow down to 30% speed, creating a calming effect as time progresses.
+- In **Timer** mode, particles speed up to 150% speed, adding urgency as the countdown ticks down.
+- Trails are rendered using the Canvas API, ensuring smooth performance even on low-end devices.
+
+### 3. Bug-Free Experience
+We tackled common issues head-on:
+- Fixed an infinite loop in the timer input logic (`TimerInput.jsx`) to ensure smooth state updates.
+- Separated stopwatch and timer logic for reliable, independent operation.
+- Removed visual glitches in button animations for a polished user experience.
+
+### 4. Accessibility & Responsiveness
+- Keyboard navigation support for all controls.
+- Responsive design that adapts to any screen size.
+- High-contrast themes (light/dark) for better visibility.
+
+---
+
+## 🏃‍♂️ Getting Started
+
+### Prerequisites
+- [Node.js](https://nodejs.org/) (v14 or higher)
+- [npm](https://www.npmjs.com/) or [yarn](https://yarnpkg.com/)
+
+### Installation
 1. Clone the repository:
    ```bash
-   git clone https://github.com/yourusername/futuristic-stopwatch.git
+   git clone https://github.com/laffingDragons/Stopwatch-Timer-UIHackaton.git
+   cd Stopwatch-Timer-UIHackaton
    ```
 
-2. Navigate to the project directory:
-   ```bash
-   cd futuristic-stopwatch
-   ```
-
-3. Install dependencies:
+2. Install dependencies:
    ```bash
    npm install
    ```
 
-4. Start the development server:
+3. Start the development server:
    ```bash
-   npm run dev
+   npm start
    ```
 
-5. Open your browser and navigate to `http://localhost:3000`
+4. Open http://localhost:3000 in your browser to see TimeMaster in action!
 
-## Deployment
-
-To deploy to GitHub Pages:
-
-1. Update the `homepage` in `package.json` with your GitHub username
-2. Update the `base` in `vite.config.js` with your repository name
-3. Run the deployment script:
-   ```bash
-   npm run deploy
-   ```
-
-## Usage
-
-- **Start/Stop:** Begin or pause the timer
-- **Lap/Reset:** In stopwatch mode, record lap times; in timer mode, reset the timer
-- **Mode Switch:** Toggle between stopwatch and timer functionality
-- **Settings:** Access theme options, sound settings, and other preferences
-- **Timer Preset:** In timer mode, set a custom countdown duration
-
-## Customization
-
-### Color Schemes
-
-The application comes with multiple built-in color schemes:
-- Cyan (default)
-- Purple
-- Green
-- Orange
-- Magenta(Easter Egg)
-
-Choose your preferred scheme in the settings panel.
-
-### Settings
-
-Access the settings panel by clicking the gear icon to customize:
-- Theme (Dark/Light)
-- Color Scheme
-- 3D Rotation Effects
-- Sound Effects
-- Gesture Controls
-
-## Project Structure
-
-```
-futuristic-stopwatch/
-├── .gitignore
-├── index.html
-├── package.json
-├── README.md
-├── vite.config.js
-└── src/
-    ├── App.jsx
-    ├── index.jsx
-    ├── index.css
-    ├── components/
-    │   ├── TimerCircle.jsx
-    │   ├── Controls.jsx
-    │   ├── LapList.jsx
-    │   ├── Settings.jsx
-    │   └── TimerInput.jsx
-    └── assets/
-        ├── sounds/
-        │   ├── button-click.mp3
-        │   └── timer-complete.mp3
-        └── fonts/
-            └── Orbitron/
-                └── [font files]
-```
-
-## Browser Support
-
-The application is optimized for modern browsers that support:
-- CSS 3D Transforms
-- SVG Animations
-- JavaScript ES6+
-
-For the best experience, we recommend using the latest versions of Chrome, Firefox, Safari, or Edge.
-
-## Contributing
-
-Contributions are welcome! Please feel free to submit a Pull Request.
-
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add some amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
-
-## License
-
-This project is licensed under the MIT License - see the LICENSE file for details.
-
-## Acknowledgements
-
-- [Anime.js](https://animejs.com/) for the animation library
-- [React](https://reactjs.org/) for the UI framework
-- [use-gesture](https://use-gesture.netlify.app/) for gesture handling
+### Usage
+- **Switch Modes**: Use the / button in the header to toggle between Stopwatch and Timer modes.
+- **Set a Timer**: In Timer mode, adjust hours, minutes, and seconds using the wave inputs, or select a preset (e.g., 5m).
+- **Start/Stop**: Press the START/STOP button, or shake your device (on mobile) to toggle the timer/stopwatch.
+- **Lap/Reset**: In Stopwatch mode, add laps while running or reset when stopped. In Timer mode, reset to the initial time.
+- **Customize**: Open the settings () to toggle themes, glow effects, and shake functionality.
 
 ---
 
-Built with ❤️ and a lot of ⚡ neon glow
+## Contributing
+We welcome contributions! To contribute:
+1. Fork the repository.
+2. Create a new branch (git checkout -b feature/your-feature).
+3. Commit your changes (git commit -m "Add your feature").
+4. Push to your branch (git push origin feature/your-feature).
+5. Open a Pull Request.
+
+Please ensure your code follows our contributing guidelines (CONTRIBUTING.md).
+
+## License
+This project is licensed under the MIT License. See the LICENSE file for details.
+
+## About the Team
+TimeMaster was created by the LaffingDragons team for the UI Hackathon 2025. I’m Akkshay Paatil, the lead developer and UI/UX enthusiast behind this project. Connect with me on LinkedIn to chat about design, code, or hackathons!
+<div align="center">
+  <strong>Made with ❤️ by LaffingDragons</strong>
+</div>
