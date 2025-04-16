@@ -1,6 +1,7 @@
 
 <div align="center">
-  <img src="https://via.placeholder.com/150.png?text=TimeMaster+Logo" alt="TimeMaster Logo" width="150"/>
+   ![image](https://github.com/user-attachments/assets/bf717cb4-3e58-4138-ac7e-2499d00fab9b)
+
   <h1>TimeMaster: Stopwatch & Timer</h1>
   <p>
     <strong>A sleek, interactive web app for time tracking with stunning neomorphic design and dynamic particle effects.</strong>
@@ -52,8 +53,10 @@ Watch the particles slow down as the stopwatch runs, or speed up as the timer co
 ## 🎥 Screenshots
 
 <div align="center">
-  <img src="https://via.placeholder.com/600x300.png?text=Stopwatch+Mode" alt="Stopwatch Mode" width="300"/>
-  <img src="https://via.placeholder.com/600x300.png?text=Timer+Mode" alt="Timer Mode" width="300"/>
+  <img width="1512" alt="image" src="https://github.com/user-attachments/assets/64df9d7f-b54c-47ae-aa45-8b373d7a4398" />
+
+   <img width="1509" alt="image" src="https://github.com/user-attachments/assets/d5dae9a2-4a62-44e7-a4c4-992383c36fa3" />
+
   <p><em>Left: Stopwatch mode with slowed particle trails. Right: Timer mode with accelerated particle trails.</em></p>
 </div>
 
@@ -80,13 +83,7 @@ The background isn’t just a static layer—it’s alive! Each particle has a f
 - In **Timer** mode, particles speed up to 150% speed, adding urgency as the countdown ticks down.
 - Trails are rendered using the Canvas API, ensuring smooth performance even on low-end devices.
 
-### 3. Bug-Free Experience
-We tackled common issues head-on:
-- Fixed an infinite loop in the timer input logic (`TimerInput.jsx`) to ensure smooth state updates.
-- Separated stopwatch and timer logic for reliable, independent operation.
-- Removed visual glitches in button animations for a polished user experience.
-
-### 4. Accessibility & Responsiveness
+### 3. Accessibility & Responsiveness
 - Keyboard navigation support for all controls.
 - Responsive design that adapts to any screen size.
 - High-contrast themes (light/dark) for better visibility.
@@ -141,7 +138,7 @@ Please ensure your code follows our contributing guidelines (CONTRIBUTING.md).
 This project is licensed under the MIT License. See the LICENSE file for details.
 
 ## About the Team
-TimeMaster was created by the LaffingDragons team for the UI Hackathon 2025. I’m Akkshay Paatil, the lead developer and UI/UX enthusiast behind this project. Connect with me on LinkedIn to chat about design, code, or hackathons!
+TimeMaster was created by the LaffingDragons team for the UI Hackathon 2025. I’m Akkshay Paatil, the lead developer and UI/UX enthusiast behind this project. Connect with me on [LinkedIn](https://www.linkedin.com/in/akkshay-paatil/) to chat about design, code, or hackathons!
 <div align="center">
   <strong>Made with ❤️ by LaffingDragons</strong>
 </div>
