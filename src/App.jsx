@@ -4,6 +4,8 @@ import LapList from './components/LapList';
 import Controls from './components/Controls';
 import TimerInput from './components/TimerInput';
 import Settings from './components/Settings';
+import { Helmet } from 'react-helmet'; // Import react-helmet
+import favicon from './assets/images/favicon.ico'; // Import the favicon
 
 function App() {
   const [time, setTime] = useState(0);
@@ -190,79 +192,84 @@ function App() {
   }, [isRunning, mode]);
 
   return (
-    <div
-      key={colorScheme}
-      className={`app-container ${theme} ${colorScheme}`}
-      ref={appRef}
-      data-theme={theme}
-      data-color-scheme={colorScheme}
-      data-glow={glowEffect}
-    >
-      <canvas ref={canvasRef} className="bg-particles" />
-      <div className="app-header">
-        <h1 className="app-title">TimeMaster</h1>
-        <div className="header-controls">
-          <button
-            className="mode-toggle"
-            onClick={toggleMode}
-            aria-label={mode === 'stopwatch' ? 'Switch to Timer' : 'Switch to Stopwatch'}
-          >
-            {mode === 'stopwatch' ? '⏱️' : '⏲️'}
-          </button>
-          <button
-            className="settings-toggle"
-            onClick={toggleSettings}
-            aria-label="Open Settings"
-          >
-            ⚙️
-          </button>
-        </div>
-      </div>
-
-      <main className="app-main">
-        <TimerCircle time={time} isRunning={isRunning} mode={mode} totalTime={totalTime} />
-        {mode === 'timer' && !isRunning && (
-          <TimerInput onTimeInput={handleTimeInput} totalTime={totalTime} />
-        )}
-        <Controls
-          isRunning={isRunning}
-          onStartStop={handleStartStop}
-          onLapReset={handleLapReset}
-          mode={mode}
-          time={time}
-          totalTime={totalTime}
-          shakeEnabled={shakeEnabled}
-          onShake={handleShake}
-        />
-        {mode === 'stopwatch' && <LapList laps={laps} />}
-        {focusSuggestion && (
-          <div className="focus-suggestion">
-            {focusSuggestion}
-            <button onClick={() => setFocusSuggestion(null)} aria-label="Dismiss Suggestion">
-              Dismiss
+    <>
+      <Helmet>
+        <link rel="icon" type="image/x-icon" href={favicon} /> {/* Dynamically set favicon */}
+      </Helmet>
+      <div
+        key={colorScheme}
+        className={`app-container ${theme} ${colorScheme}`}
+        ref={appRef}
+        data-theme={theme}
+        data-color-scheme={colorScheme}
+        data-glow={glowEffect}
+      >
+        <canvas ref={canvasRef} className="bg-particles" />
+        <div className="app-header">
+          <h1 className="app-title">TimeMaster</h1>
+          <div className="header-controls">
+            <button
+              className="mode-toggle"
+              onClick={toggleMode}
+              aria-label={mode === 'stopwatch' ? 'Switch to Timer' : 'Switch to Stopwatch'}
+            >
+              {mode === 'stopwatch' ? '⏱️' : '⏲️'}
+            </button>
+            <button
+              className="settings-toggle"
+              onClick={toggleSettings}
+              aria-label="Open Settings"
+            >
+              ⚙️
             </button>
           </div>
+        </div>
+
+        <main className="app-main">
+          <TimerCircle time={time} isRunning={isRunning} mode={mode} totalTime={totalTime} />
+          {mode === 'timer' && !isRunning && (
+            <TimerInput onTimeInput={handleTimeInput} totalTime={totalTime} />
+          )}
+          <Controls
+            isRunning={isRunning}
+            onStartStop={handleStartStop}
+            onLapReset={handleLapReset}
+            mode={mode}
+            time={time}
+            totalTime={totalTime}
+            shakeEnabled={shakeEnabled}
+            onShake={handleShake}
+          />
+          {mode === 'stopwatch' && <LapList laps={laps} />}
+          {focusSuggestion && (
+            <div className="focus-suggestion">
+              {focusSuggestion}
+              <button onClick={() => setFocusSuggestion(null)} aria-label="Dismiss Suggestion">
+                Dismiss
+              </button>
+            </div>
+          )}
+        </main>
+
+        <footer className="app-footer">
+          Shake to Start/Stop {shakeEnabled ? 'enabled' : 'disabled'}
+        </footer>
+
+        {settingsOpen && (
+          <Settings
+            onClose={toggleSettings}
+            theme={theme}
+            toggleTheme={toggleTheme}
+            glowEffect={glowEffect}
+            toggleGlow={toggleGlow}
+            colorScheme={colorScheme}
+            cycleColorScheme={cycleColorScheme}
+            shakeEnabled={shakeEnabled}
+            setShakeEnabled={setShakeEnabled}
+          />
         )}
-      </main>
-
-      <footer className="app-footer">
-        Shake to Start/Stop {shakeEnabled ? 'enabled' : 'disabled'}
-      </footer>
-
-      {settingsOpen && (
-        <Settings
-          onClose={toggleSettings}
-          theme={theme}
-          toggleTheme={toggleTheme}
-          glowEffect={glowEffect}
-          toggleGlow={toggleGlow}
-          colorScheme={colorScheme}
-          cycleColorScheme={cycleColorScheme}
-          shakeEnabled={shakeEnabled}
-          setShakeEnabled={setShakeEnabled}
-        />
-      )}
-    </div>
+      </div>
+    </>
   );
 }
 
