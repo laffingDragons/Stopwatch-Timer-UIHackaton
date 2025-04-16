@@ -20,14 +20,6 @@
   </a>
 </div>
 
----
-
-## 🏆 Hackathon Winner: Best UI/UX Design
-
-**TimeMaster** won the **Best UI/UX Design Award** at the UI Hackathon 2025! 🎉 Judges praised its modern neomorphic design, intuitive interactions, and mesmerizing background effects that enhance the user experience without distraction.
-
----
-
 ## 🌟 About TimeMaster
 
 TimeMaster is not just a stopwatch and timer—it's an experience. Designed with a focus on aesthetics and functionality, this web app combines a futuristic **neomorphic UI** with subtle, dynamic particle effects to create a time-tracking tool that’s as beautiful as it is practical. Whether you're timing a workout, a study session, or a cooking recipe, TimeMaster makes every second visually engaging.
