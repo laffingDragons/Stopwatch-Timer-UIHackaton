@@ -1,6 +1,8 @@
 
 <div align="center">
-   ![image](https://github.com/user-attachments/assets/bf717cb4-3e58-4138-ac7e-2499d00fab9b)
+   
+   <img src="https://github.com/user-attachments/assets/bf717cb4-3e58-4138-ac7e-2499d00fab9b" alt="GitHub Repository"/>
+   
 
   <h1>TimeMaster: Stopwatch & Timer</h1>
   <p>
