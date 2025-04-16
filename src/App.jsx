@@ -101,7 +101,7 @@ function App() {
     return () => clearInterval(intervalRef.current);
   }, [isRunning, mode]);
 
-  // Particle system for background
+  // Particle system for background with trails
   useEffect(() => {
     const canvas = canvasRef.current;
     const ctx = canvas.getContext('2d');
@@ -120,28 +120,58 @@ function App() {
         speedX: (Math.random() - 0.5) * 1.5,
         speedY: (Math.random() - 0.5) * 1.5,
         opacity: Math.random() * 0.5 + 0.5,
+        trail: [], // Array to store previous positions for the trail
+        maxTrailLength: 10, // Number of trail positions to store
       };
     };
 
     const initParticles = () => {
       particles = [];
-      for (let i = 0; i < 30; i++) { // Reduced from 100 to 30
+      for (let i = 0; i < 30; i++) {
         particles.push(createParticle());
       }
     };
 
     const animateParticles = () => {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
+
       particles.forEach((particle) => {
-        const speedMultiplier = isRunning ? 0.3 : 1;
+        // Adjust speed based on mode when running
+        let speedMultiplier = 1; // Default speed when not running
+        if (isRunning) {
+          if (mode === 'stopwatch') {
+            speedMultiplier = 0.3; // Slow down for stopwatch
+          } else if (mode === 'timer') {
+            speedMultiplier = 1.5; // Speed up for timer
+          }
+        }
+
+        // Update position
         particle.x += particle.speedX * speedMultiplier;
         particle.y += particle.speedY * speedMultiplier;
 
+        // Wrap around edges
         if (particle.x < 0) particle.x = canvas.width;
         if (particle.x > canvas.width) particle.x = 0;
         if (particle.y < 0) particle.y = canvas.height;
         if (particle.y > canvas.height) particle.y = 0;
 
+        // Add current position to trail
+        particle.trail.push({ x: particle.x, y: particle.y });
+        if (particle.trail.length > particle.maxTrailLength) {
+          particle.trail.shift(); // Remove oldest position
+        }
+
+        // Draw the trail (fading dots behind the particle)
+        particle.trail.forEach((pos, index) => {
+          const trailOpacity = particle.opacity * (index / particle.maxTrailLength); // Fade effect
+          ctx.beginPath();
+          ctx.arc(pos.x, pos.y, particle.size * (1 - index / particle.maxTrailLength), 0, Math.PI * 2); // Smaller size as trail fades
+          ctx.fillStyle = `rgba(255, 255, 255, ${trailOpacity})`;
+          ctx.fill();
+        });
+
+        // Draw the main particle
         ctx.beginPath();
         ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
         ctx.fillStyle = `rgba(255, 255, 255, ${particle.opacity})`;
@@ -157,7 +187,7 @@ function App() {
 
     window.addEventListener('resize', resizeCanvas);
     return () => window.removeEventListener('resize', resizeCanvas);
-  }, [isRunning]);
+  }, [isRunning, mode]);
 
   return (
     <div
