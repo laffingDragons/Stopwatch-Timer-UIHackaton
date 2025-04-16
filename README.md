@@ -1,7 +1,7 @@
 
 <div align="center">
    
-   <img src="https://github.com/user-attachments/assets/bf717cb4-3e58-4138-ac7e-2499d00fab9b" alt="GitHub Repository"/>
+   <img src="https://github.com/user-attachments/assets/bf717cb4-3e58-4138-ac7e-2499d00fab9b" alt="GitHub Repository" width="200px"/>
    
 
   <h1>TimeMaster: Stopwatch & Timer</h1>
