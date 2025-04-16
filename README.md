@@ -78,7 +78,7 @@ The application comes with multiple built-in color schemes:
 - Purple
 - Green
 - Orange
-- Rainbow
+- Magenta(Easter Egg)
 
 Choose your preferred scheme in the settings panel.
 

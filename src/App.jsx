@@ -1,355 +1,239 @@
 import { useState, useEffect, useRef } from 'react';
-import anime from 'animejs/lib/anime.es.js';
 import TimerCircle from './components/TimerCircle';
 import LapList from './components/LapList';
 import Controls from './components/Controls';
 import TimerInput from './components/TimerInput';
 import Settings from './components/Settings';
 
-const App = () => {
+function App() {
   const [time, setTime] = useState(0);
-  const [isRunning, setIsRunning] = useState(false);
   const [laps, setLaps] = useState([]);
+  const [isRunning, setIsRunning] = useState(false);
   const [mode, setMode] = useState('stopwatch');
-  const [presetTime, setPresetTime] = useState(60 * 1000);
-  const [remainingTime, setRemainingTime] = useState(60 * 1000);
-  const [showSettings, setShowSettings] = useState(false);
+  const [totalTime, setTotalTime] = useState(60 * 1000);
   const [theme, setTheme] = useState('dark');
-  const [colorScheme, setColorScheme] = useState('cyan');
-  const [shakeToControl, setShakeToControl] = useState(false);
-  const [rotationEnabled, setRotationEnabled] = useState(true);
-  const [soundEnabled, setSoundEnabled] = useState(true);
-  const [glowEffect, setGlowEffect] = useState(true); // NEW: Toggle for glow effect
-
-  const timerCompleteSound = useRef(new Audio('/sounds/timer-complete.mp3'));
-  const buttonClickSound = useRef(new Audio('/sounds/button-click.mp3'));
+  const [colorScheme, setColorScheme] = useState('magenta');
+  const [glowEffect, setGlowEffect] = useState(true);
+  const [settingsOpen, setSettingsOpen] = useState(false);
+  const [shakeEnabled, setShakeEnabled] = useState(true);
+  const [focusSuggestion, setFocusSuggestion] = useState(null);
 
   const appRef = useRef(null);
-  const timerContainerRef = useRef(null);
-  const controlsRef = useRef(null);
-  const lapsRef = useRef(null);
   const intervalRef = useRef(null);
-
-  const shakeThreshold = 15;
-  const lastShakeTime = useRef(0);
-  const accelerometer = useRef({ x: 0, y: 0, z: 0 });
-
-  // Audio cleanup
-  useEffect(() => {
-    timerCompleteSound.current.muted = !soundEnabled;
-    buttonClickSound.current.muted = !soundEnabled;
-
-    return () => {
-      timerCompleteSound.current.pause();
-      buttonClickSound.current.pause();
-    };
-  }, [soundEnabled]);
-
-  // Shake detection
-  useEffect(() => {
-    const handleDeviceMotion = (event) => {
-      if (!shakeToControl) return;
-      const { accelerationIncludingGravity } = event;
-      if (!accelerationIncludingGravity) return;
-
-      const { x, y, z } = accelerationIncludingGravity;
-      const currentTime = Date.now();
-
-      if ((currentTime - lastShakeTime.current) > 500) {
-        const deltaX = Math.abs(x - accelerometer.current.x);
-        const deltaY = Math.abs(y - accelerometer.current.y);
-        const deltaZ = Math.abs(z - accelerometer.current.z);
-
-        if (
-          (deltaX > shakeThreshold && deltaY > shakeThreshold) ||
-          (deltaX > shakeThreshold && deltaZ > shakeThreshold) ||
-          (deltaY > shakeThreshold && deltaZ > shakeThreshold)
-        ) {
-          if (isRunning) {
-            handleStop();
-          } else {
-            handleStart();
-          }
-          lastShakeTime.current = currentTime;
-        }
-      }
-
-      accelerometer.current = { x, y, z };
-    };
-
-    if (shakeToControl) {
-      window.addEventListener('devicemotion', handleDeviceMotion);
-    }
-
-    return () => {
-      window.removeEventListener('devicemotion', handleDeviceMotion);
-    };
-  }, [shakeToControl, isRunning]);
-
-  // 3D rotation effect
-  useEffect(() => {
-    if (rotationEnabled) {
-      const handleMouseMove = (e) => {
-        if (!timerContainerRef.current) return;
-        const timerRect = timerContainerRef.current.getBoundingClientRect();
-        const centerX = timerRect.left + timerRect.width / 2;
-        const centerY = timerRect.top + timerRect.height / 2;
-
-        const rotateY = ((e.clientX - centerX) / (timerRect.width / 2)) * 10;
-        const rotateX = -((e.clientY - centerY) / (timerRect.height / 2)) * 10;
-
-        anime({
-          targets: timerContainerRef.current,
-          rotateX: rotateX,
-          rotateY: rotateY,
-          duration: 400,
-          easing: 'easeOutQuad',
-        });
-      };
-
-      window.addEventListener('mousemove', handleMouseMove);
-
-      return () => {
-        window.removeEventListener('mousemove', handleMouseMove);
-      };
-    }
-  }, [rotationEnabled]);
-
-  // Initial animations
-  useEffect(() => {
-    anime({
-      targets: timerContainerRef.current,
-      scale: [0.5, 1],
-      opacity: [0, 1],
-      translateZ: [-200, 0],
-      rotateX: [-30, 0],
-      rotateY: [20, 0],
-      duration: 1500,
-      easing: 'cubicBezier(0.19, 1, 0.22, 1)',
-    });
-
-    anime({
-      targets: [controlsRef.current, lapsRef.current],
-      opacity: [0, 1],
-      translateY: [30, 0],
-      delay: anime.stagger(200, { start: 400 }),
-      duration: 1000,
-      easing: 'easeOutQuad',
-    });
-  }, []);
-
-  // Timer logic
-  useEffect(() => {
-    if (isRunning) {
-      intervalRef.current = setInterval(() => {
-        if (mode === 'stopwatch') {
-          setTime((prev) => prev + 10);
-        } else {
-          setRemainingTime((prev) => {
-            const newTime = Math.max(0, prev - 10);
-            if (newTime <= 0) {
-              handleTimerComplete();
-            }
-            return newTime;
-          });
-        }
-      }, 10);
-    }
-
-    return () => clearInterval(intervalRef.current);
-  }, [isRunning, mode]);
-
-  const handleTimerComplete = () => {
-    setIsRunning(false);
-    if (soundEnabled) {
-      timerCompleteSound.current.play().catch((e) => console.error('Error playing sound:', e));
-    }
-    anime({
-      targets: timerContainerRef.current,
-      scale: [1, 1.1, 1],
-      opacity: [1, 0.7, 1],
-      duration: 1000,
-      easing: 'easeInOutQuad',
-    });
-  };
+  const canvasRef = useRef(null);
 
   const toggleMode = () => {
-    if (isRunning) {
-      handleStop();
-    }
+    setMode(mode === 'stopwatch' ? 'timer' : 'stopwatch');
     setTime(0);
-    setRemainingTime(presetTime);
     setLaps([]);
-    setMode((prev) => (prev === 'stopwatch' ? 'timer' : 'stopwatch'));
-    if (soundEnabled) {
-      buttonClickSound.current.play().catch((e) => console.error('Error playing sound:', e));
-    }
-  };
-
-  const handlePresetTimeChange = (newTime) => {
-    setPresetTime(newTime);
-    setRemainingTime(newTime);
-  };
-
-  const handleStart = () => {
-    setIsRunning(true);
-    if (soundEnabled) {
-      buttonClickSound.current.play().catch((e) => console.error('Error playing sound:', e));
-    }
-    anime({
-      targets: appRef.current,
-      scale: [0.98, 1],
-      duration: 500,
-      easing: 'easeOutElastic(1, .5)',
-    });
-  };
-
-  const handleStop = () => {
     setIsRunning(false);
-    if (soundEnabled) {
-      buttonClickSound.current.play().catch((e) => console.error('Error playing sound:', e));
-    }
-    anime({
-      targets: appRef.current,
-      scale: [1.02, 1],
-      duration: 300,
-      easing: 'easeOutQuad',
-    });
-  };
-
-  const handleLap = () => {
-    if (mode === 'stopwatch' && isRunning) { // FIX: Only allow laps in stopwatch mode when running
-      setLaps([time, ...laps]);
-      if (soundEnabled) {
-        buttonClickSound.current.play().catch((e) => console.error('Error playing sound:', e));
-      }
-    }
-  };
-
-  const handleReset = () => {
-    if (mode === 'stopwatch') {
-      setTime(0);
-      setLaps([]);
-    } else {
-      setRemainingTime(presetTime); // FIX: Reset to preset time in timer mode
-    }
-    setIsRunning(false);
-    if (soundEnabled) {
-      buttonClickSound.current.play().catch((e) => console.error('Error playing sound:', e));
-    }
+    setTotalTime(mode === 'stopwatch' ? 5 * 60 * 1000 : 60 * 1000);
   };
 
   const toggleSettings = () => {
-    setShowSettings(!showSettings);
-    if (soundEnabled) {
-      buttonClickSound.current.play().catch((e) => console.error('Error playing sound:', e));
-    }
+    setSettingsOpen(!settingsOpen);
+  };
+
+  const cycleColorScheme = () => {
+    const schemes = ['cyan', 'purple', 'green', 'orange', 'magenta'];
+    setColorScheme(schemes[(schemes.indexOf(colorScheme) + 1) % schemes.length]);
   };
 
   const toggleTheme = () => {
     setTheme(theme === 'dark' ? 'light' : 'dark');
-    if (soundEnabled) {
-      buttonClickSound.current.play().catch((e) => console.error('Error playing sound:', e));
+  };
+
+  const toggleGlow = () => {
+    setGlowEffect(!glowEffect);
+  };
+
+  const handleShake = () => {
+    if (!shakeEnabled) return;
+    setIsRunning(!isRunning);
+  };
+
+  const handleStartStop = () => {
+    setIsRunning(!isRunning);
+  };
+
+  const handleLapReset = () => {
+    if (mode === 'stopwatch') {
+      if (isRunning) {
+        setLaps([...laps, time - (laps.length > 0 ? laps[laps.length - 1] : 0)]);
+      } else {
+        setTime(0);
+        setLaps([]);
+      }
+    } else {
+      setTime(totalTime);
+      setIsRunning(false);
     }
   };
 
-  const cycleColorScheme = () => {
-    const schemes = ['cyan', 'purple', 'green', 'orange', 'rainbow'];
-    setColorScheme(schemes[(schemes.indexOf(colorScheme) + 1) % schemes.length]);
-    if (soundEnabled) {
-      buttonClickSound.current.play().catch((e) => console.error('Error playing sound:', e));
-    }
+  const handleTimeInput = (newTime) => {
+    setTotalTime(newTime);
+    setTime(newTime);
+    setIsRunning(false);
   };
+
+  // Timer/Stopwatch Logic
+  useEffect(() => {
+    if (!isRunning) {
+      clearInterval(intervalRef.current);
+      return;
+    }
+
+    intervalRef.current = setInterval(() => {
+      if (mode === 'stopwatch') {
+        setTime((prevTime) => prevTime + 10);
+      } else {
+        setTime((prevTime) => {
+          const newTime = prevTime - 10;
+          if (newTime <= 0) {
+            setIsRunning(false);
+            return 0;
+          }
+          return newTime;
+        });
+      }
+    }, 10);
+
+    return () => clearInterval(intervalRef.current);
+  }, [isRunning, mode]);
+
+  // Particle system for background
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    const ctx = canvas.getContext('2d');
+    let particles = [];
+
+    const resizeCanvas = () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    };
+
+    const createParticle = () => {
+      return {
+        x: Math.random() * canvas.width,
+        y: Math.random() * canvas.height,
+        size: Math.random() * 3 + 2,
+        speedX: (Math.random() - 0.5) * 1.5,
+        speedY: (Math.random() - 0.5) * 1.5,
+        opacity: Math.random() * 0.5 + 0.5,
+      };
+    };
+
+    const initParticles = () => {
+      particles = [];
+      for (let i = 0; i < 30; i++) { // Reduced from 100 to 30
+        particles.push(createParticle());
+      }
+    };
+
+    const animateParticles = () => {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      particles.forEach((particle) => {
+        const speedMultiplier = isRunning ? 0.3 : 1;
+        particle.x += particle.speedX * speedMultiplier;
+        particle.y += particle.speedY * speedMultiplier;
+
+        if (particle.x < 0) particle.x = canvas.width;
+        if (particle.x > canvas.width) particle.x = 0;
+        if (particle.y < 0) particle.y = canvas.height;
+        if (particle.y > canvas.height) particle.y = 0;
+
+        ctx.beginPath();
+        ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
+        ctx.fillStyle = `rgba(255, 255, 255, ${particle.opacity})`;
+        ctx.fill();
+      });
+
+      requestAnimationFrame(animateParticles);
+    };
+
+    resizeCanvas();
+    initParticles();
+    animateParticles();
+
+    window.addEventListener('resize', resizeCanvas);
+    return () => window.removeEventListener('resize', resizeCanvas);
+  }, [isRunning]);
 
   return (
     <div
+      key={colorScheme}
       className={`app-container ${theme} ${colorScheme}`}
       ref={appRef}
       data-theme={theme}
       data-color-scheme={colorScheme}
-      data-glow={glowEffect} // NEW: Glow effect attribute
+      data-glow={glowEffect}
     >
-      <header className="app-header">
-        <h1 className="app-title">TimeMaster</h1> {/* NEW: Added title for branding */}
+      <canvas ref={canvasRef} className="bg-particles" />
+      <div className="app-header">
+        <h1 className="app-title">TimeMaster</h1>
         <div className="header-controls">
           <button
             className="mode-toggle"
             onClick={toggleMode}
-            aria-label={mode === 'stopwatch' ? 'Switch to Timer' : 'Switch to Stopwatch'} // FIX: Accessibility
+            aria-label={mode === 'stopwatch' ? 'Switch to Timer' : 'Switch to Stopwatch'}
           >
             {mode === 'stopwatch' ? '⏱️' : '⏲️'}
           </button>
           <button
             className="settings-toggle"
             onClick={toggleSettings}
-            aria-label="Open Settings" // FIX: Accessibility
+            aria-label="Open Settings"
           >
             ⚙️
           </button>
         </div>
-      </header>
+      </div>
 
-      <main className="stopwatch-container">
-        <div className="timer-wrapper" ref={timerContainerRef}>
-          <TimerCircle
-            time={mode === 'stopwatch' ? time : remainingTime}
-            isRunning={isRunning}
-            mode={mode}
-            totalTime={mode === 'stopwatch' ? 60 * 1000 : presetTime}
-          />
-        </div>
-
+      <main className="app-main">
+        <TimerCircle time={time} isRunning={isRunning} mode={mode} totalTime={totalTime} />
         {mode === 'timer' && !isRunning && (
-          <div className="timer-input-wrapper" ref={controlsRef}>
-            <TimerInput
-              presetTime={presetTime}
-              onTimeChange={handlePresetTimeChange}
-              soundEnabled={soundEnabled}
-            />
-          </div>
+          <TimerInput onTimeInput={handleTimeInput} totalTime={totalTime} />
         )}
-
-        <div className="controls-wrapper" ref={controlsRef}>
-          <Controls
-            isRunning={isRunning}
-            mode={mode}
-            onStart={handleStart}
-            onStop={handleStop}
-            onLap={handleLap}
-            onReset={handleReset}
-          />
-        </div>
-
-        {mode === 'stopwatch' && (
-          <div className="laps-wrapper" ref={lapsRef}>
-            <LapList laps={laps} />
+        <Controls
+          isRunning={isRunning}
+          onStartStop={handleStartStop}
+          onLapReset={handleLapReset}
+          mode={mode}
+          time={time}
+          totalTime={totalTime}
+          shakeEnabled={shakeEnabled}
+          onShake={handleShake}
+        />
+        {mode === 'stopwatch' && <LapList laps={laps} />}
+        {focusSuggestion && (
+          <div className="focus-suggestion">
+            {focusSuggestion}
+            <button onClick={() => setFocusSuggestion(null)} aria-label="Dismiss Suggestion">
+              Dismiss
+            </button>
           </div>
         )}
       </main>
 
-      {showSettings && (
+      <footer className="app-footer">
+        Shake to Start/Stop {shakeEnabled ? 'enabled' : 'disabled'}
+      </footer>
+
+      {settingsOpen && (
         <Settings
-          theme={theme}
-          colorScheme={colorScheme}
-          shakeToControl={shakeToControl}
-          rotationEnabled={rotationEnabled}
-          soundEnabled={soundEnabled}
-          glowEffect={glowEffect} // NEW: Glow effect setting
-          onToggleTheme={toggleTheme}
-          onChangeColorScheme={cycleColorScheme}
-          onToggleShakeControl={() => setShakeToControl(!shakeToControl)}
-          onToggleRotation={() => setRotationEnabled(!rotationEnabled)}
-          onToggleSound={() => setSoundEnabled(!soundEnabled)}
-          onToggleGlowEffect={() => setGlowEffect(!glowEffect)} // NEW: Glow effect toggle
           onClose={toggleSettings}
+          theme={theme}
+          toggleTheme={toggleTheme}
+          glowEffect={glowEffect}
+          toggleGlow={toggleGlow}
+          colorScheme={colorScheme}
+          cycleColorScheme={cycleColorScheme}
+          shakeEnabled={shakeEnabled}
+          setShakeEnabled={setShakeEnabled}
         />
       )}
-
-      <footer className="app-footer">
-        <p>{shakeToControl && 'Shake to Start/Stop enabled'}</p>
-      </footer>
     </div>
   );
-};
+}
 
 export default App;

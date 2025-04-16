@@ -1,99 +1,83 @@
 import { useEffect, useRef } from 'react';
 import anime from 'animejs/lib/anime.es.js';
-import { useGesture } from '@use-gesture/react';
 
-const Controls = ({ isRunning, mode, onStart, onStop, onLap, onReset }) => {
-  const buttonContainerRef = useRef(null);
-  const startStopRef = useRef(null);
-  const lapResetRef = useRef(null);
+const Controls = ({
+  isRunning,
+  onStartStop,
+  onLapReset,
+  mode,
+  time,
+  totalTime,
+  shakeEnabled,
+  onShake
+}) => {
+  const startStopButtonRef = useRef(null);
+  const lapResetButtonRef = useRef(null);
 
-  useGesture(
-    {
-      onSwipe: ({ direction: [dx] }) => {
-        if (dx > 0) {
-          onReset();
-          animateButton(lapResetRef.current, 'right');
-        } else if (dx < 0 && isRunning && mode === 'stopwatch') {
-          onLap();
-          animateButton(lapResetRef.current, 'left');
+  const lapResetLabel = mode === 'stopwatch' ? (isRunning ? 'LAP' : 'RESET') : 'RESET';
+
+  useEffect(() => {
+    let lastShake = 0;
+
+    const handleShakeEvent = (event) => {
+      const acceleration = event.accelerationIncludingGravity;
+      const currentTime = new Date().getTime();
+      const timeDiff = currentTime - lastShake;
+
+      if (timeDiff > 1000) {
+        const shakeStrength =
+          Math.abs(acceleration.x) +
+          Math.abs(acceleration.y) +
+          Math.abs(acceleration.z);
+
+        if (shakeStrength > 30) {
+          lastShake = currentTime;
+          onShake();
         }
-      },
-    },
-    { target: buttonContainerRef }
-  );
+      }
+    };
 
-  const animateButton = (button, direction = null) => {
+    if (shakeEnabled && window.DeviceMotionEvent) {
+      window.addEventListener('devicemotion', handleShakeEvent);
+    }
+
+    return () => {
+      window.removeEventListener('devicemotion', handleShakeEvent);
+    };
+  }, [shakeEnabled, onShake]);
+
+  const handleButtonClick = (ref, callback) => {
+    callback();
     anime({
-      targets: button,
-      scale: [1, 0.95, 1],
+      targets: ref.current,
+      scale: [1, 0.95, 1], // Press-in effect
       duration: 200,
       easing: 'easeInOutQuad',
     });
-    if (direction) {
-      anime({
-        targets: button,
-        translateX: [0, direction === 'left' ? -10 : 10, 0],
-        duration: 200,
-        easing: 'easeInOutQuad',
-      });
-    }
   };
-
-  const handleStartStop = () => {
-    if (isRunning) {
-      onStop();
-    } else {
-      onStart();
-    }
-    animateButton(startStopRef.current);
-  };
-
-  const handleLapReset = () => {
-    if (isRunning && mode === 'stopwatch') {
-      onLap();
-    } else {
-      onReset();
-    }
-    animateButton(lapResetRef.current);
-  };
-
-  useEffect(() => {
-    const buttons = [startStopRef.current, lapResetRef.current];
-    const pulseAnimation = anime({
-      targets: buttons,
-      boxShadow: [
-        '0 0 5px var(--neon-color)',
-        '0 0 10px var(--neon-color)',
-        '0 0 5px var(--neon-color)',
-      ],
-      duration: 1500,
-      direction: 'alternate',
-      loop: true,
-      easing: 'easeInOutSine',
-    });
-
-    return () => pulseAnimation.pause();
-  }, []);
 
   return (
-    <div className="controls-container" ref={buttonContainerRef}>
-      <div className="buttons-container">
+    <div className="controls-container">
+      <div className="neomorphic-buttons">
         <button
-          ref={startStopRef}
-          className={`control-button start-stop-button ${isRunning ? 'stop' : 'start'}`}
-          onClick={handleStartStop}
-          aria-label={isRunning ? 'Stop' : 'Start'} // FIX: Accessibility
+          ref={startStopButtonRef}
+          className={`neomorphic-button start-stop-button ${isRunning ? 'stop-button' : 'start-button'}`}
+          onClick={() => handleButtonClick(startStopButtonRef, onStartStop)}
+          onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') handleButtonClick(startStopButtonRef, onStartStop); }}
+          tabIndex={0}
+          aria-label={isRunning ? 'Stop Timer' : 'Start Timer'}
         >
-          {isRunning ? 'STOP' : 'START'}
+          <span>{isRunning ? 'STOP' : 'START'}</span>
         </button>
         <button
-          ref={lapResetRef}
-          className="control-button lap-reset-button"
-          onClick={handleLapReset}
-          disabled={mode !== 'stopwatch' && isRunning} // FIX: Disable lap in timer mode
-          aria-label={isRunning && mode === 'stopwatch' ? 'Lap' : 'Reset'} // FIX: Accessibility
+          ref={lapResetButtonRef}
+          className={`neomorphic-button lap-reset-button ${lapResetLabel.toLowerCase()}-button`}
+          onClick={() => handleButtonClick(lapResetButtonRef, onLapReset)}
+          onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') handleButtonClick(lapResetButtonRef, onLapReset); }}
+          tabIndex={0}
+          aria-label={lapResetLabel}
         >
-          {isRunning && mode === 'stopwatch' ? 'LAP' : 'RESET'}
+          <span>{lapResetLabel}</span>
         </button>
       </div>
     </div>
